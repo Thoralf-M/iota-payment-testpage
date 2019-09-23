@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Payment module</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="iota.min.js"></script>
+  <style>
+    body {
+      background-color: rgb(34, 37, 39);
+      color: white;
+      padding: 70px;
+      font-size: 110%;
+      font-family: 'Nunito Sans', sans-serif;
+    }
+
+    #form1 {
+      display: inline-block;
+      width: 50%;
+    }
+
+    #form2 {
+      float: right;
+      width: 50%;
+    }
+    button, input[type="submit"] { 
+      font-family: 'Nunito Sans', sans-serif;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  border:none;
+  padding: 4px 8px;
+}
+
+button:hover, input[type="submit"]:hover { 
+  background-color: rgb(31, 118, 124); /* Green */
+}
+  </style>
+</head>
+
+<body>
+  <div id="form1">
+    <p>Payment</p>
+    <form id ="payment" action="/" method="post">
+      <label>Value: </label>
+      <input id="data"type="text" name = "data"><br>
+      <label>Data: </label>
+      <input id="data"type="text" name = "data" size="50"><br>
+      <input class = "update_form" type="submit" value="Request payment">
+    </form>
+    <pre id="paymentlist">
+<b>Payments:</b>
+</pre>
+  </div>
+  <div id="form2">
+    <p>Payout</p>
+    <form id ="payout" action="/" method="post">
+      <label>Address: </label>
+      <input id="data" type="text" name="data" size="90"><br>
+      <label>Value: </label>
+      <input id="data" type="text" name="data"><br>
+      <label>Message: </label>
+      <input id="data" type="text" name="data" size="50"><br>
+      <input class = "update_form" type="submit" value="Send payout">
+    </form>
+    <button onclick="payFirstPayment()">pay first open payment</button>
+    <pre id="payoutlist">
+<b>Payouts:</b>
+</pre>
+  </div>
+
+</body>
+
+<script>
+  $(".update_form").click(function() {
+    let type = $(this).parent().attr('id')
+    $.ajax({
+           type: "POST",
+           url: type,
+           data: $(this).parent().serialize(),
+           success: function(data) {
+               console.log(data); //show response
+               let htmldata = document.getElementById(`${type}list`)
+               htmldata.innerHTML += JSON.stringify(data, null, 1)+'<br>'
+           }
+    });
+    return false; //avoid to execute the actual form submission.
+});
+
+
+function payFirstPayment(){
+  $.ajax({
+  url: 'http://localhost:3000/payments',
+  success: payments => {
+    console.log(payments)
+    let openPayments = payments.filter(e=> e.payed == false)
+    if(openPayments.length == 0){
+      console.log("No open payment")
+      let htmldata = document.getElementById(`payoutlist`)
+               htmldata.innerHTML += "No open payment"+'<br>'
+    } else {
+      //send payment to first payout
+      let payout = [openPayments[0].address, openPayments[0].value, openPayments[0].data]
+    $.ajax({
+           type: "POST",
+           url: 'payout',
+           data: {data: payout},
+           success: function(data) {
+               console.log(data); //show response
+               let htmldata = document.getElementById(`payoutlist`)
+               htmldata.innerHTML += JSON.stringify(data, null, 1)+'<br>'
+           }
+    });
+    }
+  }
+});
+}
+</script>
+
+</html>
