@@ -1,0 +1,22 @@
+{
+  "name": "iota-payment-testpage",
+  "version": "1.0.0",
+  "description": "test page",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thoralf-M/iota-payment-testpage.git"
+  },
+  "author": "Thoralf-M",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Thoralf-M/iota-payment-testpage/issues"
+  },
+  "homepage": "https://github.com/Thoralf-M/iota-payment-testpage#readme",
+  "dependencies": {
+    "iota-payment": "0.0.13"
+  }
+}
