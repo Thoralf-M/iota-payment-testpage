@@ -12,6 +12,9 @@ app.post('/payment', async (req, res) => {
   try {
     const inputdata = req.body.data
     console.log(inputdata);
+    if(inputdata[0] ==''){
+      inputdata[0] = 0
+    }
     let value = inputdata[0]
     let data = inputdata[1]
     //create payment
@@ -30,7 +33,7 @@ app.post('/payout', async (req, res) => {
     console.log(data);
     //fill data payout
     let address = data[0],
-      value = parseInt(data[1]),
+      value = data[1],
       message = data[2],
       tag = ''
 
