@@ -10,15 +10,15 @@ app.use(express.json());
 
 app.post('/payment', async (req, res) => {
   try {
-    const inputdata = req.body.data
-    console.log(inputdata);
-    if(inputdata[0] ==''){
-      inputdata[0] = 0
+    console.log(req.body);
+    if(req.body.value ==''){
+      req.body.value = 0
     }
-    let value = inputdata[0]
-    let data = inputdata[1]
+    let value = req.body.data[0]
+    let data = req.body.data[1]
     //create payment
-    let payment = await paymentModule.payments.createPayment(value, data)
+    let payment = await paymentModule.payment.createPayment(value, data)
+    console.log(payment);
     res.send(payment)
   } catch (err) {
     res.send(err)
@@ -59,6 +59,6 @@ var options = {
 let server = paymentModule.createServer(app, options)
 
 // Start server with iota-payment module on '/payments'
-server.listen(3000, function () {
-  console.log(`Server started on http://localhost:3000 `)
+server.listen(3001, function () {
+  console.log(`Server started on http://localhost:3001 `)
 })

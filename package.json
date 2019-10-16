@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Thoralf-M/iota-payment-testpage#readme",
   "dependencies": {
-    "iota-payment": "0.0.13"
+    "iota-payment": "0.0.13",
+    "zeromq": "^5.1.0"
   }
 }
