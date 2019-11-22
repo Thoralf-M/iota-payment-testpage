@@ -7,6 +7,19 @@ app.use(express.static('public/'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.post('/getBalance', async (req, res) => {
+  try {
+    console.log(req.body);
+    paymentModule.getBalance()
+      .then(balance => {
+        res.send(balance)
+        console.log(balance)
+      })
+  } catch (err) {
+    res.send(err)
+    console.log(err)
+  }
+})
 
 app.post('/payment', async (req, res) => {
   try {
@@ -51,7 +64,7 @@ app.post('/payout', async (req, res) => {
 
 
 var options = {
-  mount: '/payments',
+  mount: '',
   value: 1
   // ...
 }
@@ -59,6 +72,6 @@ var options = {
 let server = paymentModule.createServer(app, options)
 
 // Start server with iota-payment module on '/payments'
-server.listen(3001, function () {
-  console.log(`Server started on http://localhost:3001 `)
+server.listen(3002, function () {
+  console.log(`Server started on http://localhost:3002 `)
 })

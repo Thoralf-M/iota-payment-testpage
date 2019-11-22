@@ -71,7 +71,13 @@ button:hover, input[type="submit"]:hover {
 <b>Payouts:</b>
 </pre>
   </div>
-
+  <br>
+  <br>
+  <br>
+<div>
+  <button onclick="getBalance()">getBalance</button>
+    <div id="balance">
+</div>
 </body>
 
 <script>
@@ -93,7 +99,7 @@ button:hover, input[type="submit"]:hover {
 
 function payFirstPayment(){
   $.ajax({
-  url: 'http://localhost:3000/payments',
+  url: 'http://localhost:3002/payments',
   success: payments => {
     console.log(payments)
     let openPayments = payments.filter(e=> e.payed == false)
@@ -118,6 +124,14 @@ function payFirstPayment(){
   }
 });
 }
+
+function getBalance(){
+  $.ajax({
+  url: 'http://localhost:3002/getBalance',
+  success: balance => {
+    console.log("balance: "+balance)
+    let htmldata = document.getElementById(`balance`)
+               htmldata.innerHTML = balance+"i"}})}
 </script>
 
 </html>
