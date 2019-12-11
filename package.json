@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Thoralf-M/iota-payment-testpage#readme",
   "dependencies": {
     "iota-payment": "0.0.13",
+    "lowdb": "^1.0.0",
     "zeromq": "^5.1.0"
   }
 }

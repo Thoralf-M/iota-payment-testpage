@@ -125,13 +125,21 @@ function payFirstPayment(){
 });
 }
 
-function getBalance(){
-  $.ajax({
-  url: 'http://localhost:3002/getBalance',
-  success: balance => {
-    console.log("balance: "+balance)
-    let htmldata = document.getElementById(`balance`)
-               htmldata.innerHTML = balance+"i"}})}
+  function getBalance() {
+    $.ajax({
+      type: "POST",
+      url: 'http://localhost:3002/getBalance',
+      // headers: {
+      //   "authorization": 'test_secret'
+      // },
+      success: res => {
+        console.log(res.balance);
+        console.log("balance: " + res.balance)
+        let htmldata = document.getElementById(`balance`)
+        htmldata.innerHTML = res.balance + "i"
+      }
+    })
+  }
 </script>
 
 </html>

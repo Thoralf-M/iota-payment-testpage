@@ -9,29 +9,28 @@ app.use(express.json());
 
 app.post('/getBalance', async (req, res) => {
   try {
-    console.log(req.body);
     paymentModule.getBalance()
       .then(balance => {
-        res.send(balance)
-        console.log(balance)
+        console.log("balance: "+balance)
+        res.send({balance})
       })
   } catch (err) {
-    res.send(err)
+    res.sendStatus(500).send(err)
     console.log(err)
   }
 })
 
 app.post('/payment', async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     if(req.body.value ==''){
       req.body.value = 0
     }
     let value = req.body.data[0]
     let data = req.body.data[1]
     //create payment
-    let payment = await paymentModule.payment.createPayment(value, data)
-    console.log(payment);
+    let payment = await paymentModule.payment.createPayment({value, data})
+    console.log("payment",payment.address);
     res.send(payment)
   } catch (err) {
     res.send(err)
@@ -41,9 +40,9 @@ app.post('/payment', async (req, res) => {
 
 app.post('/payout', async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const data = req.body.data
-    console.log(data);
+    // console.log(data);
     //fill data payout
     let address = data[0],
       value = data[1],
@@ -52,7 +51,7 @@ app.post('/payout', async (req, res) => {
 
     let payout = await paymentModule.payout.send({ address, value, message, tag })
     res.send(payout)
-    console.log("payout", payout)
+    console.log("payout", payout.address)
 
 
   } catch (err) {
@@ -65,7 +64,8 @@ app.post('/payout', async (req, res) => {
 
 var options = {
   mount: '',
-  value: 1
+  value: 1,
+  api: true
   // ...
 }
 
