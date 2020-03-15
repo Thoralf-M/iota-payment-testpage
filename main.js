@@ -29,7 +29,7 @@ app.post('/payment', async (req, res) => {
     let value = req.body.data[0]
     let data = req.body.data[1]
     //create payment
-    let payment = await paymentModule.payment.createPayment({value, data})
+    let payment = await paymentModule.createPaymentRequest({value, data})
     console.log("payment",payment.address);
     res.send(payment)
   } catch (err) {
@@ -49,7 +49,7 @@ app.post('/payout', async (req, res) => {
       message = data[2],
       tag = ''
 
-    let payout = await paymentModule.payout.send({ address, value, message, tag })
+    let payout = await paymentModule.sendPayout({ address, value, message, tag })
     res.send(payout)
     console.log("payout", payout.address)
 
@@ -61,10 +61,8 @@ app.post('/payout', async (req, res) => {
 })
 
 
-
 var options = {
   mount: '',
-  value: 1,
   api: true
   // ...
 }
