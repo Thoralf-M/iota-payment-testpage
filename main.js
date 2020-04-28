@@ -38,6 +38,18 @@ app.post('/payment', async (req, res) => {
   }
 })
 
+app.get('/payments', async (req, res) => {
+  try {
+    //get payments
+    console.log("getPayments called");
+    let payments = await paymentModule.getOpenPayments()
+    res.send(payments)
+  } catch (err) {
+    res.send(err)
+    console.log(err)
+  }
+})
+
 app.post('/payout', async (req, res) => {
   try {
     // console.log(req.body);
@@ -70,6 +82,7 @@ var options = {
 let server = paymentModule.createServer(app, options)
 
 // Start server with iota-payment module on '/payments'
-server.listen(3002, function () {
-  console.log(`Server started on http://localhost:3002 `)
+let port = 80
+server.listen(port, function () {
+  console.log(`Server started on http://localhost:${port}`)
 })

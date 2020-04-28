@@ -66,7 +66,7 @@ button:hover, input[type="submit"]:hover {
       <input id="data" type="text" name="data" size="50"><br>
       <input class = "update_form" type="submit" value="Send payout">
     </form>
-    <button onclick="payFirstPayment()">pay first open payment</button>
+    <button onclick="payAllPayments()">pay all open payment</button>
     <pre id="payoutlist">
 <b>Payouts:</b>
 </pre>
@@ -97,29 +97,31 @@ button:hover, input[type="submit"]:hover {
 });
 
 
-function payFirstPayment(){
+function payAllPayments(){
   $.ajax({
-  url: 'http://localhost:3002/payments',
+  url: 'http://localhost:80/payments',
   success: payments => {
     console.log(payments)
     let openPayments = payments.filter(e=> e.payed == false)
     if(openPayments.length == 0){
       console.log("No open payment")
       let htmldata = document.getElementById(`payoutlist`)
-               htmldata.innerHTML += "No open payment"+'<br>'
+      htmldata.innerHTML += "No open payment"+'<br>'
     } else {
-      //send payment to first payout
-      let payout = [openPayments[0].address, openPayments[0].value, openPayments[0].data]
-    $.ajax({
-           type: "POST",
-           url: 'payout',
-           data: {data: payout},
-           success: function(data) {
-               console.log(data); //show response
-               let htmldata = document.getElementById(`payoutlist`)
-               htmldata.innerHTML += JSON.stringify(data, null, 1)+'<br>'
-           }
-    });
+      //send payments
+      for(payment of openPayments){
+        let payout = [payment.address, payment.value, payment.data]
+        $.ajax({
+          type: "POST",
+          url: 'payout',
+          data: {data: payout},
+          success: function(data) {
+            console.log(data); //show response
+            let htmldata = document.getElementById(`payoutlist`)
+            htmldata.innerHTML += JSON.stringify(data, null, 1)+'<br>'
+          }
+        });
+        }
     }
   }
 });
@@ -128,7 +130,7 @@ function payFirstPayment(){
   function getBalance() {
     $.ajax({
       type: "POST",
-      url: 'http://localhost:3002/getBalance',
+      url: 'http://localhost:80/getBalance',
       // headers: {
       //   "authorization": 'test_secret'
       // },
